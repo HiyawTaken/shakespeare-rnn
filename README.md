@@ -4,7 +4,7 @@ A character-level language model built with a SimpleRNN trained on the complete 
 
 ## Live Demo
 
-[Coming soon]
+https://shakespeare-rnn.onrender.com
 
 ## What it does
 
@@ -14,15 +14,15 @@ A temperature slider controls creativity. Low temperature produces conservative,
 
 ## How it works
 
-- **Architecture:** SimpleRNN (128 units) → Dense (vocab_size) with Softmax
-- **Loss:** Categorical cross entropy
-- **Optimizer:** Adam
-- **Dataset:** Complete works of Shakespeare (~2.5M characters)
-- **Window size:** 20 characters per input sequence
-- **Vocabulary:** 50 unique characters
-- **Training:** 35 epochs, converged at val_loss 1.844
+- Architecture: 2-layer SimpleRNN (256 units each) → Dense (vocab_size) with Softmax
+- Loss: Categorical cross entropy
+- Optimizer: Adam
+- Dataset: Complete works of Shakespeare (full corpus)
+- Window size: 40 characters per input sequence
+- Vocabulary: 50 unique characters
+- Training: Converged at val_loss 1.59, val_accuracy 51%
 
-The model reads a window of 20 characters, predicts a probability distribution over the vocabulary, samples from that distribution using temperature scaling, and appends the result. The window slides forward and the process repeats.
+The model reads a window of 40 characters, predicts a probability distribution over the vocabulary, samples from that distribution using temperature scaling, and appends the result. The window slides forward, and the process repeats.
 
 ## The Honest Result
 
