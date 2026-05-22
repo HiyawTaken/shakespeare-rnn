@@ -2,6 +2,10 @@
 
 A character-level language model built with a SimpleRNN trained on the complete works of Shakespeare. Type a seed phrase and the model generates a continuation one character at a time.
 
+# Live Demo
+
+https://shakespeare-rnn.onrender.com
+
 ## Update
 
 Found and fixed a critical bug after the initial deployment. The character vocabulary 
@@ -16,10 +20,6 @@ Also added an Embedding layer (dim=64) before the RNN layers. Each character ind
 is now mapped to a learned 64-dimensional vector before entering the network.
 
 Updated results: 54% train accuracy, 51% val accuracy, val loss 1.60, converged at epoch 12.
-
-## Live Demo
-
-https://shakespeare-rnn.onrender.com
 
 ## What it does
 
