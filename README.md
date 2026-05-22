@@ -2,6 +2,21 @@
 
 A character-level language model built with a SimpleRNN trained on the complete works of Shakespeare. Type a seed phrase and the model generates a continuation one character at a time.
 
+## Update
+
+Found and fixed a critical bug after the initial deployment. The character vocabulary 
+was built from a Python set, which has no guaranteed order — training and inference 
+were using completely different character-to-index mappings, making every model 
+prediction meaningless.
+
+Fix: vocabulary is now built from a sorted list, guaranteeing a consistent mapping 
+across all runs.
+
+Also added an Embedding layer (dim=64) before the RNN layers. Each character index 
+is now mapped to a learned 64-dimensional vector before entering the network.
+
+Updated results: 54% train accuracy, 51% val accuracy, val loss 1.60, converged at epoch 12.
+
 ## Live Demo
 
 https://shakespeare-rnn.onrender.com
@@ -23,6 +38,7 @@ A temperature slider controls creativity. Low temperature produces conservative,
 - Training: Converged at val_loss 1.59, val_accuracy 51%
 
 The model reads a window of 40 characters, predicts a probability distribution over the vocabulary, samples from that distribution using temperature scaling, and appends the result. The window slides forward, and the process repeats.
+
 
 ## The Honest Result
 
