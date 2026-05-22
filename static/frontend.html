@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shakespeare RNN Autocomplete</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #11100e;
+      --panel: #1c1915;
+      --panel-soft: #252119;
+      --ink: #efe6d1;
+      --muted: #a79b86;
+      --accent: #d6b36a;
+      --generated: #9fc7b0;
+      --border: #3d3529;
+      --danger: #e08f78;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(214, 179, 106, 0.08), transparent 32rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: "Courier New", Courier, monospace;
+      display: grid;
+      place-items: center;
+      padding: 32px 16px;
+    }
+
+    main {
+      width: min(760px, 100%);
+    }
+
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: var(--ink);
+      text-wrap: balance;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(214, 179, 106, 0.45);
+    }
+
+    a:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    .byline {
+      position: fixed;
+      top: 20px;
+      right: 22px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
+    .meta {
+      position: fixed;
+      right: 22px;
+      bottom: 20px;
+      width: min(360px, calc(100vw - 44px));
+      display: grid;
+      gap: 12px;
+    }
+
+    .meta-block {
+      border: 1px solid var(--border);
+      background: rgba(28, 25, 21, 0.68);
+      padding: 14px;
+    }
+
+    .meta-title {
+      display: block;
+      color: var(--accent);
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .meta-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .stack li {
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      color: var(--ink);
+      padding: 5px 8px;
+      font-size: 0.85rem;
+    }
+
+    .demo {
+      border: 1px solid var(--border);
+      background: rgba(28, 25, 21, 0.94);
+      padding: 22px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    textarea,
+    output {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      color: var(--ink);
+      font: inherit;
+      line-height: 1.55;
+      padding: 16px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(214, 179, 106, 0.14);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      margin: 18px 0;
+    }
+
+    .temperature {
+      min-width: 0;
+    }
+
+    .temperature-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .temperature-value {
+      min-width: 4ch;
+      color: var(--accent);
+      text-align: right;
+    }
+
+    button {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #15120c;
+      font: inherit;
+      font-weight: 700;
+      padding: 12px 18px;
+      min-width: 150px;
+      cursor: pointer;
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(1.08);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 10px 0 8px;
+    }
+
+    output {
+      display: block;
+      min-height: 180px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .generated {
+      color: var(--generated);
+      font-style: italic;
+    }
+
+    .empty {
+      color: var(--muted);
+    }
+
+    .error {
+      color: var(--danger);
+    }
+
+    @media (min-width: 1120px) {
+      main {
+        transform: translateX(-170px);
+      }
+    }
+
+    @media (max-width: 1119px) {
+      body {
+        align-items: start;
+        padding-top: 22px;
+      }
+
+      .byline,
+      .meta {
+        position: static;
+        width: min(760px, 100%);
+        text-align: left;
+      }
+
+      .byline {
+        order: 1;
+        justify-self: center;
+        margin-bottom: 14px;
+      }
+
+      main {
+        order: 2;
+      }
+
+      .meta {
+        order: 3;
+        justify-self: center;
+        margin-top: 14px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .demo {
+        padding: 16px;
+      }
+
+      .controls,
+      .meta {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <p class="byline">
+    Made by
+    <a href="https://www.linkedin.com/in/hiyawertiro/" target="_blank" rel="noopener noreferrer">Hiyaw Ertiro</a>
+  </p>
+
+  <aside class="meta" aria-label="Project details">
+    <section class="meta-block" aria-label="Technical stack">
+      <span class="meta-title">Technical stack</span>
+      <ul class="stack">
+        <li>HTML</li>
+        <li>FastAPI</li>
+        <li>Keras</li>
+        <li>NumPy</li>
+          <li>Uvicorn</li>
+          <li>Docker</li>
+
+      </ul>
+    </section>
+
+    <section class="meta-block" aria-label="Training data">
+      <span class="meta-title">Training data</span>
+      <p class="meta-text">
+        Trained on
+        <a href="https://gutenberg.org/files/100/100-0.txt" target="_blank" rel="noopener noreferrer">The Complete Works of William Shakespeare</a>.
+        For efficiency under local hardware limitations, this demo used 50% of the full text.
+      </p>
+    </section>
+  </aside>
+
+  <main>
+    <h1>Shakespeare RNN Autocomplete</h1>
+
+    <section class="demo" aria-label="Text generation demo">
+      <label for="seed">Seed input</label>
+      <textarea id="seed" spellcheck="false">shall i compare thee to a summer's day?</textarea>
+
+      <div class="controls">
+        <div class="temperature">
+          <label for="temperature">Temperature</label>
+          <div class="temperature-row">
+            <input id="temperature" type="range" min="0.1" max="1" step="0.1" value="0.7" />
+            <span class="temperature-value" id="temperatureValue">0.7</span>
+          </div>
+        </div>
+
+        <button id="generate" type="button">Generate</button>
+      </div>
+
+      <div class="output-header">
+        <span>Completed text</span>
+        <span id="note">20 characters generated</span>
+      </div>
+      <output id="output">
+        <span class="empty">Generated text will appear here.</span>
+      </output>
+    </section>
+  </main>
+
+  <script>
+    const seed = document.querySelector("#seed");
+    const button = document.querySelector("#generate");
+    const output = document.querySelector("#output");
+    const note = document.querySelector("#note");
+    const temperature = document.querySelector("#temperature");
+    const temperatureValue = document.querySelector("#temperatureValue");
+
+    temperature.addEventListener("input", () => {
+      temperatureValue.textContent = Number(temperature.value).toFixed(1);
+    });
+
+    function renderCompletedText(seedText, generatedText) {
+      output.replaceChildren();
+      output.append(document.createTextNode(seedText));
+
+      const generated = document.createElement("span");
+      generated.className = "generated";
+      generated.textContent = generatedText;
+      output.append(generated);
+
+      note.textContent = `${generatedText.length} characters generated`;
+    }
+
+    button.addEventListener("click", async () => {
+      const seedText = seed.value.trim();
+
+      if (!seedText) {
+        output.innerHTML = '<span class="error">Enter seed text first.</span>';
+        note.textContent = "0 characters generated";
+        seed.focus();
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Generating...";
+
+      try {
+        const params = new URLSearchParams({
+          query: seedText,
+          temperature: temperature.value,
+        });
+
+        const response = await fetch(`/autocomplete/query?${params}`, {
+          method: "POST",
+        });
+
+        if (!response.ok) {
+          throw new Error("The backend could not generate text.");
+        }
+
+        const data = await response.json();
+        renderCompletedText(seedText, data.output || "");
+      } catch (error) {
+        output.innerHTML = `<span class="error">${error.message}</span>`;
+        note.textContent = "0 characters generated";
+      } finally {
+        button.disabled = false;
+        button.textContent = "Generate";
+      }
+    });
+  </script>
+</body>
+</html>
