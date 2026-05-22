@@ -350,7 +350,7 @@
     <div class="stats-col" aria-label="Model statistics">
       <div class="stat">
         <span class="stat-label">Train acc</span>
-        <span class="stat-value">55%</span>
+        <span class="stat-value">54%</span>
         <span class="stat-sub">training data</span>
       </div>
       <div class="stat">
@@ -360,8 +360,8 @@
       </div>
       <div class="stat">
         <span class="stat-label">Val loss</span>
-        <span class="stat-value">1.59</span>
-        <span class="stat-sub">epoch 60</span>
+        <span class="stat-value">1.60</span>
+        <span class="stat-sub">epoch 12</span>
       </div>
     </div>
 
@@ -373,6 +373,8 @@
         <p class="arch-title">Architecture</p>
         <div class="arch-flow">
           <span class="arch-node">Input (40 chars)</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Embedding 64</span>
           <span class="arch-arrow">→</span>
           <span class="arch-node">SimpleRNN 256</span>
           <span class="arch-arrow">→</span>
@@ -392,8 +394,8 @@
           <div class="temperature">
             <label for="temperature">Temperature</label>
             <div class="temperature-row">
-              <input id="temperature" type="range" min="0.1" max="1" step="0.1" value="0.7" />
-              <span class="temperature-value" id="temperatureValue">0.7</span>
+              <input id="temperature" type="range" min="0.1" max="1" step="0.1" value="0.1" />
+              <span class="temperature-value" id="temperatureValue">0.1</span>
             </div>
             <p class="temp-hint" id="tempHint"></p>
           </div>
@@ -409,6 +411,7 @@
         </output>
 
         <div class="why">
+          Try <strong>regenerating</strong> a couple more times to get some words that make sense.</br>
           The model reads your text one character at a time, but its memory resets a little with every new character — so by the end of your sentence, it has already forgotten the beginning. That short-term memory problem is called the <strong>vanishing gradient</strong>, and it is the hard limit of this architecture.
         </div>
       </section>

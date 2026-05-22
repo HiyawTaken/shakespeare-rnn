@@ -29,7 +29,7 @@ def serve_frontend():
 async def autocomplete(query: str, temperature: float = 0.7):
     output = ""
     #loop to predict the next 20 characters
-    for _ in range(20):
+    for _ in range(40):
         #prepare data to be fed into the model
         query = query.lower()
         encoded_query = char_to_index(query)
