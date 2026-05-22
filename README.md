@@ -6,6 +6,30 @@ A character-level language model built with a SimpleRNN trained on the complete 
 
 https://shakespeare-rnn.onrender.com
 
+
+## What it does
+
+Enter a seed phrase in the browser. The model predicts the next character, appends it, and repeats — generating text character by character in the style of Shakespeare.
+
+A temperature slider controls creativity. Low temperature produces conservative, repetitive output. High temperature produces unpredictable, creative output.
+
+## How it works
+
+- Architecture: Embedding (dim=64) → 2-layer SimpleRNN (256 units each) → Dense (vocab_size) with Softmax
+- Loss: Categorical cross entropy
+- Optimizer: Adam
+- Dataset: Complete works of Shakespeare (full corpus)
+- Window size: 40 characters per input sequence
+- Vocabulary: 50 unique characters
+- Training: Converged at val_loss 1.60, val_accuracy 51%
+
+The model reads a window of 40 characters, predicts a probability distribution over the vocabulary, samples from that distribution using temperature scaling, and appends the result. The window slides forward, and the process repeats.
+
+
+## The Honest Result
+
+The model generates non-sense. We have reached the structural ceiling of a SimpleRNN. The hidden state gets overwritten at every time step, erasing early context. This is the vanishing gradient problem made visible.
+
 ## Update
 
 Found and fixed a critical bug after the initial deployment. The character vocabulary 
@@ -21,28 +45,6 @@ is now mapped to a learned 64-dimensional vector before entering the network.
 
 Updated results: 54% train accuracy, 51% val accuracy, val loss 1.60, converged at epoch 12.
 
-## What it does
-
-Enter a seed phrase in the browser. The model predicts the next character, appends it, and repeats — generating text character by character in the style of Shakespeare.
-
-A temperature slider controls creativity. Low temperature produces conservative, repetitive output. High temperature produces unpredictable, creative output.
-
-## How it works
-
-- Architecture: 2-layer SimpleRNN (256 units each) → Dense (vocab_size) with Softmax
-- Loss: Categorical cross entropy
-- Optimizer: Adam
-- Dataset: Complete works of Shakespeare (full corpus)
-- Window size: 40 characters per input sequence
-- Vocabulary: 50 unique characters
-- Training: Converged at val_loss 1.59, val_accuracy 51%
-
-The model reads a window of 40 characters, predicts a probability distribution over the vocabulary, samples from that distribution using temperature scaling, and appends the result. The window slides forward, and the process repeats.
-
-
-## The Honest Result
-
-The model generates non-sense. We have reached the structural ceiling of a SimpleRNN. The hidden state gets overwritten at every time step, erasing early context. This is the vanishing gradient problem made visible.
 
 ## Stack
 
