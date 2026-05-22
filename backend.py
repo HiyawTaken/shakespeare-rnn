@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import keras
 import numpy as np
-from model import char_to_index, idx_to_corpus
+from model import char_to_index, idx_to_corpus, corpus_idx
 
 app = FastAPI()
 

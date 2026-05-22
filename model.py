@@ -13,10 +13,8 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
             if letter in keep:
                 c.write(letter)'''
 
-corpus_set = set('abcdefghijklmnopqrstuvwxyz \n.,!?;:-\'\"')
-corpus_idx = {}
-for char in corpus_set:
-    corpus_idx[char] = len(corpus_idx)
+corpus_set = sorted('abcdefghijklmnopqrstuvwxyz \n.,!?;:-\'\"')
+corpus_idx = {char: idx for idx, char in enumerate(corpus_set)}
 
 idx_to_corpus = {v: k for k, v in corpus_idx.items()}
 
