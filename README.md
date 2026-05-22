@@ -5,7 +5,7 @@ A character-level language model built with a SimpleRNN trained on the complete 
 ## Update
 
 Found and fixed a critical bug after the initial deployment. The character vocabulary 
-was built from a Python set, which has no guaranteed order — training and inference 
+was built from a Python set, which has no guaranteed order; training and inference 
 were using completely different character-to-index mappings, making every model 
 prediction meaningless.
 
