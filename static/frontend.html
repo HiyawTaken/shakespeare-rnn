@@ -18,15 +18,13 @@
       --danger: #e08f78;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at top left, rgba(214, 179, 106, 0.08), transparent 32rem),
+        radial-gradient(circle at top left, rgba(214,179,106,0.08), transparent 32rem),
         var(--bg);
       color: var(--ink);
       font-family: "Courier New", Courier, monospace;
@@ -35,37 +33,228 @@
       padding: 32px 16px;
     }
 
-    main {
-      width: min(760px, 100%);
-    }
-
-    h1 {
-      margin: 0 0 22px;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1;
-      font-weight: 700;
-      letter-spacing: 0;
-      color: var(--ink);
-      text-wrap: balance;
-    }
-
     a {
       color: var(--accent);
       text-decoration: none;
-      border-bottom: 1px solid rgba(214, 179, 106, 0.45);
+      border-bottom: 1px solid rgba(214,179,106,0.45);
+    }
+    a:hover { border-bottom-color: var(--accent); }
+
+    /* ── Page layout ── */
+    .page {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: min(960px, 100%);
     }
 
-    a:hover {
-      border-bottom-color: var(--accent);
+    /* ── Left stats — rotated labels, centered vertically ── */
+    .stats-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .stat {
+      background: var(--panel);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 80px;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+
+
+      white-space: nowrap;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: 0.62rem;
+      color: var(--muted);
+      text-align: center;
+
+
+      white-space: nowrap;
+    }
+
+    /* ── Main content ── */
+    main { width: min(720px, 100%); flex: 1; }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1;
+      font-weight: 700;
+      color: var(--ink);
     }
 
     .byline {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    /* ── Architecture ── */
+    .arch {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+
+    .arch-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin: 0 0 10px;
+    }
+
+    .arch-flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      font-size: 0.82rem;
+    }
+
+    .arch-node {
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      padding: 5px 9px;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .arch-arrow { color: var(--muted); font-size: 0.8rem; }
+
+    /* ── Demo ── */
+    .demo {
+      border: 1px solid var(--border);
+      background: rgba(28,25,21,0.94);
+      padding: 20px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 7px;
+    }
+
+    textarea, output {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      color: var(--ink);
+      font: inherit;
+      line-height: 1.55;
+      padding: 14px;
+      outline: none;
+    }
+
+    textarea { min-height: 100px; resize: vertical; }
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(214,179,106,0.14);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: end;
+      margin: 16px 0;
+    }
+
+    .temperature { min-width: 0; }
+
+    .temperature-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+    .temperature-value { min-width: 4ch; color: var(--accent); text-align: right; }
+
+    .temp-hint {
+      margin-top: 5px;
+      font-size: 0.76rem;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+    .temp-hint span { color: var(--ink); }
+
+    button {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #15120c;
+      font: inherit;
+      font-weight: 700;
+      padding: 11px 16px;
+      min-width: 140px;
+      cursor: pointer;
+    }
+    button:hover:not(:disabled) { filter: brightness(1.08); }
+    button:disabled { cursor: wait; opacity: 0.65; }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin: 10px 0 7px;
+    }
+
+    output {
+      display: block;
+      min-height: 140px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .generated { color: var(--generated); font-style: italic; }
+    .empty { color: var(--muted); }
+    .error { color: var(--danger); }
+
+    .why {
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .why strong { color: var(--ink); font-weight: normal; }
+
+    /* ── Right meta sidebar ── */
+    .byline-fixed {
       position: fixed;
       top: 20px;
       right: 22px;
       margin: 0;
       color: var(--muted);
-      line-height: 1.5;
       font-size: 0.9rem;
       text-align: right;
     }
@@ -74,38 +263,31 @@
       position: fixed;
       right: 22px;
       bottom: 20px;
-      width: min(360px, calc(100vw - 44px));
+      width: min(220px, calc(100vw - 44px));
       display: grid;
       gap: 12px;
     }
 
     .meta-block {
       border: 1px solid var(--border);
-      background: rgba(28, 25, 21, 0.68);
-      padding: 14px;
+      background: rgba(28,25,21,0.68);
+      padding: 13px;
     }
 
     .meta-title {
       display: block;
       color: var(--accent);
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       margin-bottom: 8px;
       text-transform: uppercase;
-    }
-
-    .meta-text {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.55;
+      letter-spacing: 0.06em;
     }
 
     .stack {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
+      gap: 6px;
+      margin: 0; padding: 0;
       list-style: none;
     }
 
@@ -113,234 +295,126 @@
       border: 1px solid var(--border);
       background: var(--panel-soft);
       color: var(--ink);
-      padding: 5px 8px;
-      font-size: 0.85rem;
+      padding: 4px 7px;
+      font-size: 0.8rem;
     }
 
-    .demo {
-      border: 1px solid var(--border);
-      background: rgba(28, 25, 21, 0.94);
-      padding: 22px;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-    }
-
-    label {
-      display: block;
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 8px;
-    }
-
-    textarea,
-    output {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: var(--panel-soft);
-      color: var(--ink);
-      font: inherit;
-      line-height: 1.55;
-      padding: 16px;
-      outline: none;
-    }
-
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(214, 179, 106, 0.14);
-    }
-
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 16px;
-      align-items: end;
-      margin: 18px 0;
-    }
-
-    .temperature {
-      min-width: 0;
-    }
-
-    .temperature-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--accent);
-    }
-
-    .temperature-value {
-      min-width: 4ch;
-      color: var(--accent);
-      text-align: right;
-    }
-
-    button {
-      border: 1px solid var(--accent);
-      background: var(--accent);
-      color: #15120c;
-      font: inherit;
-      font-weight: 700;
-      padding: 12px 18px;
-      min-width: 150px;
-      cursor: pointer;
-    }
-
-    button:hover:not(:disabled) {
-      filter: brightness(1.08);
-    }
-
-    button:disabled {
-      cursor: wait;
-      opacity: 0.65;
-    }
-
-    .output-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin: 10px 0 8px;
-    }
-
-    output {
-      display: block;
-      min-height: 180px;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .generated {
-      color: var(--generated);
-      font-style: italic;
-    }
-
-    .empty {
-      color: var(--muted);
-    }
-
-    .error {
-      color: var(--danger);
-    }
-
-    @media (min-width: 1120px) {
-      main {
-        transform: translateX(-170px);
+    /* ── Responsive ── */
+    @media (max-width: 760px) {
+      .page { flex-direction: column; align-items: stretch; }
+      .stats-col {
+        flex-direction: row;
+        align-self: stretch;
       }
+      .stat { flex: 1; }
+      .stat-label, .stat-sub {
+        writing-mode: horizontal-tb;
+        transform: none;
+      }
+      .byline-fixed, .meta { position: static; }
+      .byline-fixed { margin-bottom: 12px; text-align: left; }
+      .meta { width: 100%; margin-top: 16px; }
     }
 
-    @media (max-width: 1119px) {
-      body {
-        align-items: start;
-        padding-top: 22px;
-      }
-
-      .byline,
-      .meta {
-        position: static;
-        width: min(760px, 100%);
-        text-align: left;
-      }
-
-      .byline {
-        order: 1;
-        justify-self: center;
-        margin-bottom: 14px;
-      }
-
-      main {
-        order: 2;
-      }
-
-      .meta {
-        order: 3;
-        justify-self: center;
-        margin-top: 14px;
-      }
-    }
-
-    @media (max-width: 620px) {
-      .demo {
-        padding: 16px;
-      }
-
-      .controls,
-      .meta {
-        grid-template-columns: 1fr;
-      }
-
-      button {
-        width: 100%;
-      }
+    @media (max-width: 480px) {
+      .controls { grid-template-columns: 1fr; }
+      button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <p class="byline">
-    Made by
-    <a href="https://www.linkedin.com/in/hiyawertiro/" target="_blank" rel="noopener noreferrer">Hiyaw Ertiro</a>
+
+  <p class="byline-fixed">
+    Made by <a href="https://www.linkedin.com/in/hiyawertiro/" target="_blank" rel="noopener noreferrer">Hiyaw Ertiro</a>
   </p>
 
   <aside class="meta" aria-label="Project details">
-    <section class="meta-block" aria-label="Technical stack">
-      <span class="meta-title">Technical stack</span>
+    <section class="meta-block">
+      <span class="meta-title">Stack</span>
       <ul class="stack">
-        <li>HTML</li>
-        <li>FastAPI</li>
-        <li>Keras</li>
-        <li>NumPy</li>
-          <li>Uvicorn</li>
-          <li>Docker</li>
-
+        <li>HTML</li><li>FastAPI</li><li>Keras</li>
+        <li>NumPy</li><li>Uvicorn</li><li>Docker</li>
       </ul>
     </section>
-
-    <section class="meta-block" aria-label="Training data">
+    <section class="meta-block">
       <span class="meta-title">Training data</span>
-      <p class="meta-text">
-        Trained on
-        <a href="https://gutenberg.org/files/100/100-0.txt" target="_blank" rel="noopener noreferrer">The Complete Works of William Shakespeare</a>.
-        For efficiency under local hardware limitations, this demo used 50% of the full text.
+      <p style="margin:0;color:var(--muted);font-size:0.85rem;line-height:1.5">
+        <a href="https://gutenberg.org/files/100/100-0.txt" target="_blank" rel="noopener noreferrer">Complete Works of Shakespeare</a>
       </p>
     </section>
   </aside>
 
-  <main>
-    <h1>Shakespeare RNN Autocomplete</h1>
+  <div class="page">
 
-    <section class="demo" aria-label="Text generation demo">
-      <label for="seed">Seed input</label>
-      <textarea id="seed" spellcheck="false">shall i compare thee to a summer's day?</textarea>
+    <!-- Left stats column — rotated labels, centered vertically -->
+    <div class="stats-col" aria-label="Model statistics">
+      <div class="stat">
+        <span class="stat-label">Train acc</span>
+        <span class="stat-value">55%</span>
+        <span class="stat-sub">training data</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Val acc</span>
+        <span class="stat-value">51%</span>
+        <span class="stat-sub">held-out data</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Val loss</span>
+        <span class="stat-value">1.59</span>
+        <span class="stat-sub">epoch 60</span>
+      </div>
+    </div>
 
-      <div class="controls">
-        <div class="temperature">
-          <label for="temperature">Temperature</label>
-          <div class="temperature-row">
-            <input id="temperature" type="range" min="0.1" max="1" step="0.1" value="0.7" />
-            <span class="temperature-value" id="temperatureValue">0.7</span>
+    <!-- Main content -->
+    <main>
+      <h1>Shakespeare RNN Autocomplete</h1>
+
+      <div class="arch">
+        <p class="arch-title">Architecture</p>
+        <div class="arch-flow">
+          <span class="arch-node">Input (40 chars)</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">SimpleRNN 256</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">SimpleRNN 256</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Dense + Softmax</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Next character</span>
+        </div>
+      </div>
+
+      <section class="demo" aria-label="Text generation demo">
+        <label for="seed">Seed input</label>
+        <textarea id="seed" spellcheck="false">to be, or not to be, that is the</textarea>
+
+        <div class="controls">
+          <div class="temperature">
+            <label for="temperature">Temperature</label>
+            <div class="temperature-row">
+              <input id="temperature" type="range" min="0.1" max="1" step="0.1" value="0.7" />
+              <span class="temperature-value" id="temperatureValue">0.7</span>
+            </div>
+            <p class="temp-hint" id="tempHint"></p>
           </div>
+          <button id="generate" type="button">Generate</button>
         </div>
 
-        <button id="generate" type="button">Generate</button>
-      </div>
+        <div class="output-header">
+          <span>Completed text</span>
+          <span id="note">20 characters generated</span>
+        </div>
+        <output id="output">
+          <span class="empty">Generated text will appear here.</span>
+        </output>
 
-      <div class="output-header">
-        <span>Completed text</span>
-        <span id="note">20 characters generated</span>
-      </div>
-      <output id="output">
-        <span class="empty">Generated text will appear here.</span>
-      </output>
-    </section>
-  </main>
+        <div class="why">
+          The model reads your text one character at a time, but its memory resets a little with every new character — so by the end of your sentence, it has already forgotten the beginning. That short-term memory problem is called the <strong>vanishing gradient</strong>, and it is the hard limit of this architecture.
+        </div>
+      </section>
+    </main>
+
+  </div>
 
   <script>
     const seed = document.querySelector("#seed");
@@ -349,26 +423,46 @@
     const note = document.querySelector("#note");
     const temperature = document.querySelector("#temperature");
     const temperatureValue = document.querySelector("#temperatureValue");
+    const tempHint = document.querySelector("#tempHint");
+
+    const hints = {
+      "0.1": "<span>Safe mode.</span> Always picks the most confident character. Repetitive but structured.",
+      "0.2": "<span>Very cautious.</span> Predictable output. Good for seeing what the model learned.",
+      "0.3": "<span>Cautious.</span> Mostly safe with occasional variation.",
+      "0.4": "<span>Conservative.</span> Reliable with a little creativity.",
+      "0.5": "<span>Balanced.</span> Mix of safe and exploratory choices.",
+      "0.6": "<span>Slightly creative.</span> Starting to take small risks.",
+      "0.7": "<span>Creative.</span> More unpredictable — and messier.",
+      "0.8": "<span>Experimental.</span> Ignores safe choices and explores freely.",
+      "0.9": "<span>Wild.</span> Almost random. Expect nonsense with occasional surprises.",
+      "1.0": "<span>Chaos mode.</span> Fully random. Pure unpredictability.",
+    };
+
+    function updateHint(val) {
+      const key = parseFloat(val).toFixed(1);
+      tempHint.innerHTML = hints[key] || "";
+    }
 
     temperature.addEventListener("input", () => {
-      temperatureValue.textContent = Number(temperature.value).toFixed(1);
+      const v = Number(temperature.value).toFixed(1);
+      temperatureValue.textContent = v;
+      updateHint(v);
     });
+
+    updateHint(temperature.value);
 
     function renderCompletedText(seedText, generatedText) {
       output.replaceChildren();
       output.append(document.createTextNode(seedText));
-
       const generated = document.createElement("span");
       generated.className = "generated";
       generated.textContent = generatedText;
       output.append(generated);
-
       note.textContent = `${generatedText.length} characters generated`;
     }
 
     button.addEventListener("click", async () => {
       const seedText = seed.value.trim();
-
       if (!seedText) {
         output.innerHTML = '<span class="error">Enter seed text first.</span>';
         note.textContent = "0 characters generated";
@@ -380,19 +474,9 @@
       button.textContent = "Generating...";
 
       try {
-        const params = new URLSearchParams({
-          query: seedText,
-          temperature: temperature.value,
-        });
-
-        const response = await fetch(`/autocomplete/query?${params}`, {
-          method: "POST",
-        });
-
-        if (!response.ok) {
-          throw new Error("The backend could not generate text.");
-        }
-
+        const params = new URLSearchParams({ query: seedText, temperature: temperature.value });
+        const response = await fetch(`/autocomplete/query?${params}`, { method: "POST" });
+        if (!response.ok) throw new Error("The backend could not generate text.");
         const data = await response.json();
         renderCompletedText(seedText, data.output || "");
       } catch (error) {
